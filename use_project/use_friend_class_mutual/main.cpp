@@ -7,40 +7,52 @@
 #include <iostream>
 
 using namespace std;
-class A {
+//必须提前声明class B不然编译会报错
+class B;
+class A{
 private:
     int a;
 public:
     friend class B;
 
     A(){
-        cout << "A Construct ... " << endl;
+        cout << "类A被构造" << endl;
         a = 20;
     }
     ~A(){
-        cout << "A DeConstruct ... " << endl;
+        cout << "类A被析构" << endl;
     }
+    void show(B & b);
 };
 
 class B{
 private:
-    int b = 10;
+    int b;
 public:
-    B() {
-        cout << "B Construct ... " << endl;
+    friend class A;
+    B(){
+        cout << "类B的构造" << endl;
+        b = 12;
     }
-    ~B() {
-        cout << "B DeConstruct ... " << endl;
+    ~B(){
+        cout << "类B被析构" << endl;
     }
-    int add()
-    {
-        A a;
-        return b + a.a;
+    void show(A &a){
+        cout << "a="<<a.a ;
+        cout << " b=" <<b<<endl;
     }
 };
+//函数不能放在class A 中，不然会编译报错
+void A::show(B &b){
+    cout << "a="<<a ;
+    cout << " b="<<b.b<< endl;
+}
 
 int main(){
+    A a;
     B b;
-    cout << b.add() << endl;
+    a.show(b);
+    b.show(a);
+
     return 0;
 }
